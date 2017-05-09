@@ -1,0 +1,149 @@
+/*очистка*/
+html,body,div,span,applet,object,iframe,table,caption,tbody,tfoot,thead,tr,th,td,del,dfn,/*em,*/font,img,ins,kbd,q,s,samp,small,strike,/*strong,*/sub,sup,tt,var,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,dl,dt,dd,ol,ul,li,fieldset,form,label,legend {
+   vertical-align: baseline;
+   font-family: Calibri;
+   font-weight: inherit;
+   font-style: inherit;
+   font-size: 1em;
+   outline: 0;
+   padding: 0;
+   margin: 0;
+   border: 0;
+}
+
+:focus {
+   outline: 0;
+}
+
+table {
+   border-collapse: separate;
+   border-spacing: 0;
+}
+
+caption,th,td {
+   font-weight: normal;
+   text-align: left;
+}
+/*очистка закончена*/
+
+body {
+    background:#000 url("/jq/images/ui-bg_dots-medium_15_000000_4x4.png") 50% 50% repeat;
+    color:#fff;
+    width:650px;
+}
+
+.selector .true {display: none}
+.selector.true .true {display:inherit}
+.selector.true .false {display:none}
+
+.etalon {display:none;}
+
+label[for="watchThis"] {
+    width:95%;
+}
+
+#hasChanged {display:none;}
+
+#isError.true {
+    color:red;
+    font-weight: bolder;
+}
+
+#frequence input {
+    width:30px;
+    border:0;
+    border-bottom:1px dashed white;
+    background:transparent;
+    color:white;
+    text-align: center;
+}
+
+.list {
+    table-layout: fixed;
+    width:100%;
+}
+
+#newStatus {
+    font-weight: bolder;
+    color:chartreuse;
+}
+
+.list td {
+    width:40px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.list .deleteIt {
+    text-decoration: line-through;
+    opacity:0.5;
+}
+
+.list .notUpdated .isUpdated {display:none;}
+.list .isUpdated .notUpdated {display:none;}
+
+.list td.name {
+    width:300px;
+    text-align: left;
+}
+.list td.edit {
+    width:18px;
+    text-align: left;
+    vertical-align: middle;
+}
+.list td.edit img {vertical-align: middle;}
+.list td.lastPerson {width:150px;}
+.list td.time {width:52px;}
+.list td.changeStatus {width:31px;}
+.list td.remove {width:31px;}
+.list tr.notAgree .notAgree {display:inline-block}
+.list tr.isApproved .isApproved {display:inline-block}
+.list tr .lastPerson img {
+    display:none;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+}
+
+.list a {
+    cursor:pointer;
+}
+
+.list tr:hover {
+    background-color:rgba(100, 100, 100, 0.5);
+}
+
+.list td:first-of-type a {
+    color:white;
+}
+
+#tab_log table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+#tab_log table tr td:first-of-type{
+    width:60px;
+}
+
+#tab_log table tr:hover {
+    background-color:rgba(100, 100, 100, 0.5);
+}
+
+#tab_log table tr.error {
+    background-color:rgba(150, 0, 0, 0.7);
+}
+#tab_log table tr:hover.error {
+    background-color:rgba(150, 0, 0, 1);
+}
+
+#tab_help p{
+    padding-bottom:13px;
+}
+#tab_help p:last-of-type{
+    padding-bottom:0px;
+}
+
+#tab_help img {
+    vertical-align: middle;
+}

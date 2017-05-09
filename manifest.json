@@ -1,0 +1,41 @@
+{
+    "manifest_version": 2,
+    "name": "Парсер обращений граждан",
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "description": "Смотрите help, читайте всплывающие подсказки, не обижайте граждан",
+    "version": "1.0.3",
+    "browser_action": {
+        "default_icon": "/misc/icon.png",
+        "default_popup": "index.html"
+    },
+    "icons": {
+        "16": "/misc/icon.png",
+        "48": "/misc/icon_large.png",
+        "128": "/misc/icon_largest.png"
+    },
+    "background": {
+        "scripts": ["jq/jquery-3.1.1.min.js","misc/md5-min.js","misc/functions.js", "background.js"],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://mosedo.ru/*", 
+                "https://www.mosedo.ru/*",
+                "https://mosedo.mos.ru/*",
+                "https://www.mosedo.mos.ru/*"
+            ],
+            "js": ["content.js"]
+        }
+    ],
+    "permissions": [
+        "https://mosedo.ru/*",
+        "https://www.mosedo.ru/*",
+        "https://mosedo.mos.ru/*",
+        "https://www.mosedo.mos.ru/*",
+        "tabs",
+        "storage",
+        "background",
+        "alarms"
+    ]
+}

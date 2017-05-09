@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Парсер обращений граждан</title>
+        <meta charset="utf-8">
+        <script src="/jq/jquery-3.1.1.min.js"></script>
+        <script src="/jq/jquery-ui.min.js"></script>
+        <link href="/jq/jquery-ui.min.css" rel="stylesheet">
+        <link href="/misc/styles.css" rel="stylesheet">
+        <script src="/misc/functions.js"></script>
+        <script src="/misc/md5-min.js"></script>
+        <script src="/scripts.js"></script>
+    </head>
+    <body>
+        <div id="tabs">
+            <ul>
+                <li><a href="#tab_main">Основное</a></li>
+                <li><a href="#tab_list">Список</a></li>
+                <li><a href="#tab_log">Лог</a></li>
+                <li><a href="#tab_help">?</a></li>
+                <li><a href="#tab_addons">Дополнительно</a></li>
+            </ul>
+            <div id="tab_main">
+                <input type="checkbox" name="watchThis" id="watchThis"><label for="watchThis">Наблюдать за этим</label><br/>
+                <input type="checkbox" name="inWork" id="inWork"><label for="inWork">В работе...</label>
+                <input type="button" name="runNow" id="runNow" value="Запустить сейчас">
+                <span class="selector" id="isError">
+                    <span class="true">есть ошибки</span>
+                    <span class="false"></span>
+                </span>
+                <div id="frequence">
+                    Парсер запускается в 30 и 00 минут каждого часа
+                </div>
+                <div id="list">
+                    В работе <span id="inWatch"></span><span id="hasChanged">, cтатус изменен <span id="newStatus"></span>:
+                    </span>
+                    <table class="list isApproved">
+                        <tr class="etalon" data-id="0">
+                            <td class="edit"><a title="изменить название"><img src="/misc/icon_edit.png"/></a></td>
+                            <td class="name"><a href="" target="_blank" title="к карточке регистрации"></a></td>
+                            <td class="lastPerson">
+                                <a href="" target="mailto_iframe" title="Формировать письмо"></a>
+                                <img class="notAgree" title="отказал в согласовании" src="/misc/icon_notAgree.png"/>
+                                <img class="isApproved" title="согласовано" src="/misc/icon_isApproved.png"/>
+                            </td>
+                            <td title="всего согласующих/согласовали"><span class="total"></span>/<span class="ready"></span></td>
+                            <td class="time" title="дата последнего изменения статуса(либо дата начала наблюдения)"></td>
+                            <td class="changeStatus">
+                                <a title="Снять/вернуть пометку о просмотре">
+                                    <img class="notUpdated" src="misc/icon_notUpdated.png"/>
+                                    <img class="isUpdated" src="misc/icon_isUpdated.png"/>
+                                </a>
+                            </td>
+                            <td class="remove" ><a title="Снять/вернуть наблюдение"><img src="misc/icon_remove.png"/></a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="tab_list">
+                <table class="list"></table>
+            </div>
+            <div id="tab_log">
+                <button id="clearLog">Очистить лог</button>
+                <table><tr class="etalon"><td></td><td><pre></pre></td></tr></table>
+            </div>
+            <div id="tab_help">
+                <p>Общий порядок работы</p>
+                <ul>
+                    <li>1. Заходим на нужную страницу (там должна быть таблица согласования)</li>
+                    <li>
+                        2. Нажимаем кнопку "следить за этим". Если она недоступна - значит, приложение не видит лист 
+                        согласования. Можно попробовать обновить страницу. Если это не помогает, надо отослать 
+                        мне адрес этой страницы, я попробую разобраться и сделать исправления
+                    </li>
+                    <li>3. Ждем. Когда в документе появятся какие-то изменения, иконка расширения замигает зеленым</li>
+                </ul>
+                <p>
+                    Изменения статусов (просмотрено, удалено) для документов в их списках реально применяются только после закрытия окна программы.
+                    Это сделано для обеспечения защиты от случайных нажатий
+                </p>
+                <p>
+                    Наличие новых версий приложение <b>НЕ СМОТРИТ</b>. Проверяется только та версия, которая была выбрана в 
+                    момент постановки в наблюдение. Новые версии для приложения являются другими документами и по
+                    умолчанию игнорируются
+                </p>
+                <p>
+                    При проверке документов приложение ищет любые изменения в содержании 
+                    таблицы согласования, но не знает, какое именно 
+                    изменение произошло. То есть, изменение в любой строке(в т.ч. непоследней) 
+                    будет означать для приложения изменение всей таблицы.
+                </p>
+                <p>
+                    Приложению требуется доступ к интернету и действующая авторизация в mosedo. 
+                    Никакие пароли оно не хранит и доступа к ним не имеет, а потому само подключиться не может. 
+                    Если авторизации нет, проверка не производится. В этом случае (и в случае любых других ошибок)
+                    иконка приложения будет мигать красным.
+                </p>
+                <p>
+                    Значок мигает красным, если в логах есть ошибки. Чтобы прекратить мигание, нужно очистить лог.
+                </p>
+                <p>
+                    Документ будет считаться имеющим обновление до тех пор, пока пользователь сам не изменит его статус, 
+                    нажав на иконку <img src="misc/icon_isUpdated.png"/>. Для уменьшения нагрузки на целевой сервер 
+                    документы, помеченные как имеющие непросмотренные обновления, не парсятся при очередном проходе. 
+                    По этой причине возможно, что, если между событиями установки статуса "есть обновление" 
+                    программой и снятием этого статуса пользователем произошли изменения, документ опять будет 
+                    выделен как "имеющий обновление". Это не баг, это фича (с)
+                </p>
+                <p>
+                    Документы будут продолжать проверяться независимо от наличия у них статуса "Утверждено", до тех пор, 
+                    пока пользователь сам не нажмет на иконку удаления документа из наблюдения 
+                    <img src="misc/icon_remove.png"/>.
+                </p>
+            </div>
+            <div id="tab_addons">
+                <input type="checkbox" id="closeUrgentPopup"/>
+                <label for="closeUrgentPopup">Автозакрытие окна "Срочный документ"</label>
+                <p>
+                    Автозакрытие окна "Срочный документ" работает так: проверяется каждые 10 милисекунд в течение 3 секунд 
+                    после открытия страницы наличие этого окна. Если окно есть, автоматически жмет кнопку "закрыть". Таким
+                    образом, возможно, что на короткий промежуток времени это окно будет видно
+                </p>
+            </div>
+        </div>
+        <iframe name="mailto_iframe" style="position:absolute;visibility:hidden;width:0;height:0;"></iframe>
+    </body>
+</html>
